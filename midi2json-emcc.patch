@@ -1,13 +1,19 @@
 diff --git a/src/main.cpp b/src/main.cpp
-index 15772e2..dc2348d 100644
+index 15772e2..8e506f2 100644
 --- a/src/main.cpp
 +++ b/src/main.cpp
-@@ -7,41 +7,18 @@
+@@ -1,47 +1,25 @@
+ /// MIDI to JSON converter
+ // This program uses midifile.sapp.org library
+-
+ #include "midi/MidiFile.h"
+ #include "midi/MidiEvent.h"
+ #include <fstream>
  #include <iostream>
  #include <cstdlib>
  #include <algorithm>
 +#include <sstream>
-+#include <stdexcept>
++#include <emscripten.h>
  ///#include <windows.h>
 -unsigned x=1;
 -unsigned dtick;
@@ -47,31 +53,36 @@ index 15772e2..dc2348d 100644
      if (b==0)
      {
 -        Message("Dividing by zero.",true);
-+        throw std::runtime_error("Dividing by zero.");
++        EM_ASM(
++            throw new Error("Dividing by zero.");
++        );
      }
      else
      {
-@@ -53,7 +30,7 @@ unsigned sd(unsigned & a,unsigned b)
+@@ -53,7 +31,9 @@ unsigned sd(unsigned & a,unsigned b)
          }
          else
          {
 -            Message("Dividing error.",true);
-+            throw std::overflow_error("Dividing error.");
++            EM_ASM(
++                throw new Error("Dividing error.");
++            );
          }
      }
      return 0;
-@@ -244,9 +221,7 @@ std::string Checkn(int n)
+@@ -244,8 +224,9 @@ std::string Checkn(int n)
          return "#A-3";
      else if (n==21)
          return "A-3";
 -    else
 -        Message("Wrong note range.",true);
--    return "ERROR";
-+    throw std::runtime_error("Wrong note range.");
++    EM_ASM(
++        throw new Error("Wrong note range.");
++    );
+     return "ERROR";
  }
  std::string Checkd(unsigned t,bool mode)
- {
-@@ -255,7 +230,7 @@ std::string Checkd(unsigned t,bool mode)
+@@ -255,7 +236,7 @@ std::string Checkd(unsigned t,bool mode)
      {
          while (true)
          {
@@ -80,16 +91,18 @@ index 15772e2..dc2348d 100644
              if (t>=w)
              {
                  t -= w;
-@@ -302,7 +277,7 @@ std::string Checkd(unsigned t,bool mode)
+@@ -302,7 +283,9 @@ std::string Checkd(unsigned t,bool mode)
                  result+='P';
              }
              else if (t<w)
 -                Message("Wrong length value.",true);
-+                throw std::runtime_error("Wrong length value.");
++                EM_ASM(
++                    throw new Error("Wrong length value.");
++                );
              if (t==0)
                  break;
          }
-@@ -313,7 +288,7 @@ std::string Checkd(unsigned t,bool mode)
+@@ -313,7 +296,7 @@ std::string Checkd(unsigned t,bool mode)
      {
          while (true)
          {
@@ -98,16 +111,18 @@ index 15772e2..dc2348d 100644
              if (t>=w)
              {
                  t -= w;
-@@ -360,7 +335,7 @@ std::string Checkd(unsigned t,bool mode)
+@@ -360,7 +343,9 @@ std::string Checkd(unsigned t,bool mode)
                  result+='Y';
              }
              else if (t<w)
 -                Message("Wrong length value.",true);
-+                throw std::runtime_error("Wrong length value.");
++                EM_ASM(
++                    throw new Error("Wrong length value.");
++                );
              if (t==0)
                  break;
          }
-@@ -407,12 +382,14 @@ class JsonTrack
+@@ -407,12 +392,14 @@ class JsonTrack
  };
  class plik
  {
@@ -124,7 +139,7 @@ index 15772e2..dc2348d 100644
          for (size_t CurrentTrack=0; CurrentTrack<JsonTracks.size(); ++CurrentTrack)
          {
              logfile << "\n\n" << "Track " << CurrentTrack + 1 << '\n' << std::endl;
-@@ -420,7 +397,7 @@ class plik
+@@ -420,7 +407,7 @@ class plik
              bool once;
              for (element* e : JsonTracks[CurrentTrack]->elements)
              {
@@ -133,21 +148,25 @@ index 15772e2..dc2348d 100644
                  {
                      doubler = true;
                      once = true;
-@@ -436,39 +413,39 @@ class plik
+@@ -436,39 +423,47 @@ class plik
                  if (doubler==true&&!once)
                  {
                      doubler=false;
 -                    if (e->length!=dtick)
 -                        Message("Fatal error with 5<>!",true);
 +                    if (e->length!=_dtick)
-+                        throw std::runtime_error("Fatal error with 5<>!");
++                        EM_ASM(
++                            throw new Error("Fatal error with 5<>!");
++                        );
                      logfile << '>';
                  }
                  logfile << ',' << std::flush;
              }
              if (doubler==true)
 -                Message("5<> not closed!",true);
-+                throw std::runtime_error("5<> not closed!");
++                EM_ASM(
++                    throw new Error("5<> not closed!");
++                );
          }
          if (!warnings.empty())
              logfile << "\n\n" << "Warnings" << '\n' << std::endl;
@@ -163,7 +182,9 @@ index 15772e2..dc2348d 100644
 +        if (m.read(filename)!=1)
          {
 -            m.read(GetFilename("MIDI file < "));
-+            throw std::runtime_error("Bad MIDI input.");
++            EM_ASM(
++                throw new Error("Bad MIDI input.");
++            );
          }
 -        while (m.status()!=1);
  
@@ -171,7 +192,9 @@ index 15772e2..dc2348d 100644
          if (m.getTrackCount()<1)
          {
 -            Message("Wrong track number value.",true);
-+            throw std::runtime_error("Wrong track number value.");
++            EM_ASM(
++                throw new Error("Wrong track number value.");
++            );
          }
          m.deltaTicks();
 -        std::cout << "Suggested tick/Q: " << m.getTicksPerQuarterNote() * 8 << std::endl << std::endl;
@@ -185,28 +208,34 @@ index 15772e2..dc2348d 100644
          for (int trak=0; trak<m.getTrackCount(); ++trak)
          {
              JsonTracks.push_back(new JsonTrack);
-@@ -516,9 +493,9 @@ public:
+@@ -516,9 +511,13 @@ public:
                              if (irchannel==trak+1)
                              {
                                  if (JsonTracks.back()->elements.empty())
 -                                    Message("No elements.",true);
-+                                    throw std::runtime_error("No elements.");
++                                    EM_ASM(
++                                        throw new Error("No elements.");
++                                    );
                                  if (JsonTracks.back()->elements.back()->notes.empty())
 -                                    Message("No notes.",true);
-+                                    throw std::runtime_error("No notes.");
++                                    EM_ASM(
++                                        throw new Error("No notes.");
++                                    );
                                  JsonTracks.back()->elements.back()->length += m[trak][lastontick].tick;
                              }
                              // Add a rest as the element
-@@ -543,7 +520,7 @@ public:
+@@ -543,7 +542,9 @@ public:
                              }
                          }
                          if (JsonTracks.back()->elements.back()->notes.empty())
 -                            Message("No notes.",true);
-+                            throw std::runtime_error("No notes.");
++                            EM_ASM(
++                                throw new Error("No notes.");
++                            );
                          JsonTracks.back()->elements.back()->length = lastduration;
  
                          notevalues.clear();
-@@ -554,7 +531,7 @@ public:
+@@ -554,7 +555,7 @@ public:
                  }
              }
          }
@@ -215,7 +244,7 @@ index 15772e2..dc2348d 100644
      }
      ~plik()
      {
-@@ -563,10 +540,16 @@ public:
+@@ -563,10 +564,16 @@ public:
              delete t;
          }
      }

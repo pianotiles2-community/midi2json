@@ -54,16 +54,22 @@ processButton.addEventListener('click', (e) => {
 		FS.write(fd, data, 0, data.length, 0);
 		FS.close(fd);
 
-		const result = Module.ccall(
-			'processMidiFile',
-			'string',
-			['string', 'number', 'number', 'number', 'number'],
-			['test.mid', midiTickQ.value, midiTrack5.value, midiTick5.value, ignoreRestsTrack.value],
-		);
+		try {
+			const result = Module.ccall(
+				'processMidiFile',
+				'string',
+				['string', 'number', 'number', 'number', 'number'],
+				['test.mid', midiTickQ.value, midiTrack5.value, midiTick5.value, ignoreRestsTrack.value],
+			);
 
-		output.value = result;
-		downloadButton.style.display = 'block';
-		statusMessage.innerText = 'File successfully converted.';
+			output.value = result;
+			downloadButton.style.display = 'block';
+			statusMessage.innerHTML = '<span style="color: #0f0; font-weight: 700">File successfully converted.</span>';
+		} catch (e) {
+			statusMessage.innerHTML = `<span style="color: #f00; font-weight: 700">ERROR: ${
+				e.message ?? 'Unknown error occurred.'
+			}<br />Please refer to <a href="https://pianotiles2-community.github.io/wiki/midi2json.html#troubleshooting" target="_blank">the wiki page</a> for a list of errors and troubleshooting tips.</span>`;
+		}
 	};
 	reader.readAsArrayBuffer(file);
 });
