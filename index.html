@@ -1,80 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="color-scheme" content="dark">
-		<meta name="theme-color" content="#52d5f2">
-		<meta property="og:image" content="https://raw.githubusercontent.com/pianotiles2-community/wiki/main/wiki/public/pianotiles2-og.png">
-		<meta property="og:image:alt" content="Piano Tiles 2">
-		<meta property="og:image:width" content="1280">
-		<meta property="og:image:height" content="720">
-		<meta property="og:locale" content="en">
-		<meta property="og:site_name" content="midi2json | Piano Tiles 2 Tools">
-		<meta property="og:type" content="website">
-		<meta property="og:title" content="midi2json | Piano Tiles 2 Tools">
-		<meta property="og:url" content="https://pianotiles2-community.github.io/midi2json/">
-		<meta property="og:description" content="midi2json for Piano Tiles 2. Initially developed for desktop by Volian0, it has now been ported to the web. Runs directly on the web browser without the need for compiling the original source code.">
+		<meta name="color-scheme" content="dark" />
+		<meta name="theme-color" content="#52d5f2" />
+		<meta
+			property="og:image"
+			content="https://raw.githubusercontent.com/pianotiles2-community/wiki/main/wiki/public/pianotiles2-og.png"
+		/>
+		<meta property="og:image:alt" content="Piano Tiles 2" />
+		<meta property="og:image:width" content="1280" />
+		<meta property="og:image:height" content="720" />
+		<meta property="og:locale" content="en" />
+		<meta property="og:site_name" content="midi2json | Piano Tiles 2 Tools" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="midi2json | Piano Tiles 2 Tools" />
+		<meta property="og:url" content="https://pianotiles2-community.github.io/midi2json/" />
+		<meta
+			property="og:description"
+			content="midi2json for Piano Tiles 2. Initially developed for desktop by Volian0, it has now been ported to the web. Runs directly on the web browser without the need for compiling the original source code."
+		/>
 		<title>midi2json | Piano Tiles 2 Tools</title>
 		<link rel="stylesheet" href="./css/style.css" />
 	</head>
 	<body>
-		<main class="container">
-			<div class="content-wrapper">
-				<nav class="navigation">
-					<a href="https://pianotiles2-community.github.io/" target="_blank" class="nav-link">Home</a>
-					<a href="https://pianotiles2-community.github.io/wiki/" target="_blank" class="nav-link">Wiki</a>
-					<a href="https://pianotiles2-community.github.io/tools/" target="_blank" class="nav-link">Tools</a>
-				</nav>
+		<main class="main">
+			<nav class="navigation">
+				<a href="#" class="nav-link">Home</a>
+				<a href="#" class="nav-link">Wiki</a>
+				<a href="#" class="nav-link">Tools</a>
+			</nav>
 
-				<h1 class="page-title">midi2json</h1>
-				<p class="page-subtitle">for Piano Tiles 2</p>
-				<p class="author">Tool by Volian0</p>
-				<p><a href="https://github.com/pianotiles2-community/midi2json" target="_blank" class="nav-link">GitHub Source Code</a> | <a href="https://pianotiles2-community.github.io/wiki/midi2json.html" target="_blank" class="nav-link">Instructions</a></p>
-
-				<div class="file-upload">
-					<p class="file-upload-text">
-						Drag and drop your MIDI file here.<br />
-						Or click the button to open file selector.
-					</p>
-					<input type="file" accept=".mid" id="file-input" style="display: none" />
-					<button class="file-upload-button" onclick="document.getElementById('file-input').click()">Select MIDI File</button>
-					<p class="file-name"></p>
+			<header class="hero">
+				<div class="hero-content">
+					<h1 class="hero-title">midi2json</h1>
+					<h2 class="hero-subtitle">for Piano Tiles 2</h2>
+					<p class="hero-description">Tool by Volian0</p>
 				</div>
+			</header>
 
-				<div class="settings">
-					<div class="setting-item">
-						<label class="setting-label">MIDI tick for Q:</label>
-						<input type="number" id="midiTickQ" class="setting-value" value="0" />
-					</div>
-					<div class="setting-item">
-						<label class="setting-label">MIDI track for 5<>:</label>
-						<input type="number" id="midiTrack5" class="setting-value" value="0" />
-					</div>
-					<div class="setting-item">
-						<label class="setting-label">MIDI tick for 5<>:</label>
-						<input type="number" id="midiTick5" class="setting-value" value="0" />
-					</div>
-					<div class="setting-item">
-						<label class="setting-label">Ignore rests on MIDI track:</label>
-						<input type="number" id="ignoreRestsTrack" class="setting-value" value="0" />
-					</div>
-				</div>
-
-				<textarea class="output" readonly>Output will be shown here.</textarea>
-
-				<div class="actions">
-					<button class="action-button" id="process-button">Process File</button>
-					<button class="action-button" id="download-button">Download File</button>
-				</div>
-
-				<p class="status"></p>
-
-				<footer class="footer">
-					Released under the MIT License.<br />
-					Copyright © 2024 The Piano Tiles 2 Community.
-				</footer>
+			<div class="cta-buttons">
+				<a href="#" class="cta-button">GitHub Source Code</a>
+				<a href="#" class="cta-button">Instructions</a>
 			</div>
+
+			<div class="file-dropzone">
+				<p class="dropzone-instructions">
+					Drag and drop your MIDI file here.<br />
+					Or click the button to open file selector.
+				</p>
+				<input type="file" accept=".mid" id="file-input" style="display: none" />
+				<button class="file-selector" onclick="document.getElementById('file-input').click()">
+					Select MIDI File
+				</button>
+				<p class="selected-file"></p>
+			</div>
+
+			<div class="main-content">
+				<div class="settings-column">
+					<div class="settings-container">
+						<div class="setting-item">
+							<label for="qDuration" class="setting-label">MIDI ticks for Q duration:</label>
+							<input type="number" id="qDuration" class="setting-input" value="7680" />
+						</div>
+						<div class="setting-item">
+							<label for="doubleTilesTrack" class="setting-label">MIDI track for double tiles:</label>
+							<input type="number" id="doubleTilesTrack" class="setting-input" value="0" />
+						</div>
+						<div class="setting-item">
+							<label for="doubleTilesTick" class="setting-label">MIDI tick for double tiles:</label>
+							<input type="number" id="doubleTilesTick" class="setting-input" value="0" />
+						</div>
+						<div class="setting-item">
+							<label for="ignoreRestsTrack" class="setting-label">Ignore rests on MIDI track:</label>
+							<input type="number" id="ignoreRestsTrack" class="setting-input" value="0" />
+						</div>
+					</div>
+				</div>
+				<div class="output-column">
+					<div class="output-container">
+						<label for="outputTextarea" class="output-label">Output:</label>
+						<textarea id="outputTextarea" class="output-textarea" readonly>
+Output will be shown here.</textarea
+						>
+					</div>
+				</div>
+			</div>
+
+			<div class="action-buttons">
+				<button class="process-button">Process File</button>
+				<button class="download-button">Download Text</button>
+			</div>
+
+			<p class="status-message"></p>
+
+			<footer class="page-footer">
+				Released under the MIT License.<br />
+				Copyright © 2024 The Piano Tiles 2 Community.
+			</footer>
 		</main>
 		<script src="./js/midi2json.js"></script>
 		<script src="./js/main.js"></script>

@@ -1,52 +1,53 @@
-const dropzone = document.querySelector('.file-upload');
+const dropzone = document.querySelector('.file-dropzone');
 const fileInput = document.getElementById('file-input');
-const fileInfo = document.querySelector('.file-name');
+const fileInfo = document.querySelector('.selected-file');
 
-const processButton = document.getElementById('process-button');
-const downloadButton = document.getElementById('download-button');
-const statusMessage = document.querySelector('.status');
+const processButton = document.querySelector('.process-button');
+const downloadButton = document.querySelector('.download-button');
+const statusMessage = document.querySelector('.status-message');
 
-const output = document.querySelector('.output');
+const output = document.getElementById('outputTextarea');
 
 let file = null;
 
-dropzone.addEventListener('dragover', (e) => {
+dropzone.addEventListener('dragover', e => {
 	e.preventDefault();
-	document.querySelector('.file-upload').style.border = '3px dashed rgb(138 180 248 / 100%)';
+	dropzone.style.border = '4px dashed rgb(138 180 248 / 100%)';
 });
 
-dropzone.addEventListener('dragleave', (e) => {
+dropzone.addEventListener('dragleave', e => {
 	e.preventDefault();
-	document.querySelector('.file-upload').style.border = '';
+	dropzone.style.border = '';
 });
 
-dropzone.addEventListener('drop', (e) => {
+dropzone.addEventListener('drop', e => {
 	e.preventDefault();
+	dropzone.style.border = '';
 	file = e.dataTransfer.files[0];
 	const fileName = file.name;
 	const fileSize = file.size.toLocaleString();
 	fileInfo.innerText = `${fileName} (${fileSize} B)`;
 });
 
-fileInput.addEventListener('change', (e) => {
+fileInput.addEventListener('change', e => {
 	file = e.target.files[0];
 	const fileName = file.name;
 	const fileSize = file.size.toLocaleString();
 	fileInfo.innerText = `${fileName} (${fileSize} B)`;
 });
 
-processButton.addEventListener('click', (e) => {
+processButton.addEventListener('click', e => {
 	if (file === null) {
 		return;
 	}
 
-	const midiTickQ = document.getElementById('midiTickQ');
-	const midiTrack5 = document.getElementById('midiTrack5');
-	const midiTick5 = document.getElementById('midiTick5');
+	const midiTickQ = document.getElementById('qDuration');
+	const midiTrack5 = document.getElementById('doubleTilesTrack');
+	const midiTick5 = document.getElementById('doubleTilesTick');
 	const ignoreRestsTrack = document.getElementById('ignoreRestsTrack');
 
 	const reader = new FileReader();
-	reader.onload = (event) => {
+	reader.onload = event => {
 		const buffer = event.target.result;
 		const data = new Uint8Array(buffer);
 
