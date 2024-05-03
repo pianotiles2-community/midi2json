@@ -4,7 +4,7 @@ midi2json for Piano Tiles 2. Initially developed for desktop by [Volian0](https:
 
 Instructions on how to use this tool can be found here: https://pianotiles2-community.github.io/wiki/midi2json.html
 
-# Getting Started
+## Getting Started
 
 Before you begin, ensure you have the following prerequisites:
 
@@ -76,3 +76,7 @@ For advanced users who prefer a more hands-on approach:
     ```bash
     cp ./midi2json.* ../js
     ```
+
+## License
+
+The majority of the content in this repository is licensed under the [MIT license](https://opensource.org/licenses/MIT). Refer to [the license file](/LICENSE) for further details. In summary, you are free to use the content as you wish.
